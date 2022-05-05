@@ -15,20 +15,22 @@ func GetStatus(c *cli.Context) (err error) {
 	config, err := utils.LoadConfig(c.String("config"))
 
 	if err != nil {
-		log.Panic(err)
+		return err
 	}
 
 	machine := config.Machines[0]
 
 	auth_key, _ := homedir.Expand(config.AuthKey)
 	auth, err := goph.Key(auth_key, "")
+
 	if err != nil {
-		log.Fatal(err)
+		return err
 	}
 
 	client, err := goph.New(machine.User, machine.Host, auth)
+
 	if err != nil {
-		log.Panicln(err)
+		return err
 	}
 
 	defer client.Close()
@@ -36,13 +38,13 @@ func GetStatus(c *cli.Context) (err error) {
 	out, err := client.Run(config.Commands["squeue"])
 
 	if err != nil {
-		log.Panic(err)
+		return err
 	}
 
 	jobs, err := utils.ParseJobs(string(out), machine)
 
 	if err != nil {
-		log.Panic(err)
+		return err
 	}
 
 	utils.ShowJobs(jobs, c.String("format"))
@@ -56,7 +58,7 @@ func main() {
 	var err error
 
 	app := &cli.App{
-		Name: "ssl-tool",
+		Name: "hpc-cli",
 		Flags: []cli.Flag{
 			&cli.StringFlag{
 				Name:    "config",
@@ -66,6 +68,11 @@ func main() {
 			},
 		},
 		Commands: [](*cli.Command){
+			{
+				Name:   "exec",
+				Usage:  "Execute the command.",
+				Action: utils.ExecCommand,
+			},
 			{
 				Name:   "jobs",
 				Usage:  "List all the running jobs.",
