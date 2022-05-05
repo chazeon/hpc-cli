@@ -7,8 +7,9 @@ import (
 )
 
 type Machine struct {
-	Host string
-	User string
+	Name string `json:"name"`
+	Host string `json:"host"`
+	User string `json:"user"`
 }
 
 type Config struct {

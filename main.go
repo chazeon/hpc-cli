@@ -1,8 +1,6 @@
 package main
 
 import (
-	"encoding/json"
-	"fmt"
 	"log"
 	"os"
 
@@ -41,15 +39,13 @@ func GetStatus(c *cli.Context) (err error) {
 		log.Panic(err)
 	}
 
-	parsed, err := utils.ParseSqueue(string(out), machine)
+	jobs, err := utils.ParseJobs(string(out), machine)
 
 	if err != nil {
 		log.Panic(err)
 	}
 
-	bytes, err := json.Marshal(parsed)
-
-	fmt.Println(string(bytes))
+	utils.ShowJobs(jobs, c.String("format"))
 
 	return
 
@@ -78,6 +74,7 @@ func main() {
 					&cli.StringFlag{
 						Name:    "format",
 						Aliases: []string{"fmt", "f"},
+						Value:   "table",
 					},
 				},
 			},
