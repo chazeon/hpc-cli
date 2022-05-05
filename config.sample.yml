@@ -1,0 +1,18 @@
+auth_key: ~/.ssh/id_rsa
+
+machines:
+
+  - name: PSC-Bridges
+    host: bridges2.psc.edu
+    user: user
+
+  - name: Expanse
+    host: expanse.sdsc.edu
+    user: user
+
+  - name: Anvil
+    host: anvil.rcac.purdue.edu
+    user: user
+
+commands:
+  squeue: squeue -u $(whoami) -o %all
