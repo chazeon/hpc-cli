@@ -2,15 +2,15 @@ auth_key: ~/.ssh/id_rsa
 
 machines:
 
-  - name: PSC-Bridges
+  - name: bridges2
     host: bridges2.psc.edu
     user: user
 
-  - name: Expanse
+  - name: expanse
     host: expanse.sdsc.edu
     user: user
 
-  - name: Anvil
+  - name: anvil
     host: anvil.rcac.purdue.edu
     user: user
 
