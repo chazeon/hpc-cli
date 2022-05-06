@@ -66,6 +66,12 @@ func main() {
 				Usage:   "Load configuration from `FILE`",
 				Value:   "config.yml",
 			},
+			&cli.StringSliceFlag{
+				Name:    "machine",
+				Aliases: []string{"m"},
+				Usage:   "Specify the `MACHINE` to apply on.",
+				Value:   nil,
+			},
 		},
 		Commands: [](*cli.Command){
 			{

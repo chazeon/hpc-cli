@@ -73,7 +73,29 @@ func ExecCommand(c *cli.Context) (err error) {
 		return err
 	}
 
-	clients, err := GetClients(config.Machines, auth)
+	var machines []Machine
+
+	if len(c.StringSlice("machine")) == 0 {
+
+		machines = config.Machines
+
+	} else {
+
+		machines = []Machine{}
+		mIndex := map[string]Machine{}
+
+		for _, machine := range config.Machines {
+			mIndex[machine.Name] = machine
+		}
+
+		for _, name := range c.StringSlice("machine") {
+			if val, ok := mIndex[name]; ok {
+				machines = append(machines, val)
+			}
+		}
+	}
+
+	clients, err := GetClients(machines, auth)
 
 	if err != nil {
 		return err
@@ -81,7 +103,7 @@ func ExecCommand(c *cli.Context) (err error) {
 
 	ch := make(chan CommandResult, len(clients))
 
-	for i, machine := range config.Machines {
+	for i, machine := range machines {
 
 		client := clients[i]
 		go RunCommand(machine, client, cmd, ch)
